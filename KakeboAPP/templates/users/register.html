@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="{% static 'users/img/logo.png' %}" alt="Logo">
+            </div>
+            <h2>Welcome</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" name="username" id="username" required>
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" id="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password1" id="password1" required>
+                    <label for="password1">Password</label>
+                    <span class="toggle-password" onclick="togglePassword('password1')">Show</span>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password2" id="password2" required>
+                    <label for="password2">Confirm Password</label>
+                    <span class="toggle-password" onclick="togglePassword('password2')">Show</span>
+                </div>
+                <button type="submit" class="login-btn">REGISTER</button>
+            </form>
+            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
+    </div>
+    <script>
+        function togglePassword(id) {
+            let passwordField = document.getElementById(id);
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                event.target.textContent = 'Hide';
+            } else {
+                passwordField.type = 'password';
+                event.target.textContent = 'Show';
+            }
+        }
+    </script>
+</body>
+</html>
