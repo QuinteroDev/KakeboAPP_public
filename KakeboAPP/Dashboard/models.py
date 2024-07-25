@@ -19,6 +19,9 @@ class Spending(models.Model):
     category = models.CharField(max_length=100, choices=SPENDING_CHOICES, default='necesidades')
     amount = models.FloatField()
 
+    class Meta:
+        ordering = ['date']
+
     def __str__(self):
         return f"{self.description} - {self.amount}"
     
@@ -40,6 +43,9 @@ class Income(models.Model):
     description = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=100, choices=INCOME_CHOICES, default='nomina')
     amount = models.FloatField()
+
+    class Meta:
+         ordering = ['date']
 
     def __str__(self):
         return f"{self.description} - {self.amount}"

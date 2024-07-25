@@ -3,70 +3,50 @@ from .models import Income, Spending
 from .forms import IncomeForm, SpendingForm
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-
-
+from datetime import datetime
+from django.db import models
 
 @login_required
 def dashboard(request):
-    months = [
-        {'name': 'January', 'value': '01'},
-        {'name': 'February', 'value': '02'},
-        {'name': 'March', 'value': '03'},
-        {'name': 'April', 'value': '04'},
-        {'name': 'May', 'value': '05'},
-        {'name': 'June', 'value': '06'},
-        {'name': 'July', 'value': '07'},
-        {'name': 'August', 'value': '08'},
-        {'name': 'September', 'value': '09'},
-        {'name': 'October', 'value': '10'},
-        {'name': 'November', 'value': '11'},
-        {'name': 'December', 'value': '12'},
-    ]
+    user = request.user
+
+    selected_year = request.GET.get('year', datetime.now().year)
+    selected_month = request.GET.get('month', datetime.now().month)
+    selected_year = int(selected_year)
+    selected_month = int(selected_month)
     
-    years = list(range(2024, 2027))  # Genera una lista de años desde 2024 hasta 2026
+    incomes = Income.objects.filter(user=user, date__year=selected_year, date__month=selected_month).order_by('date')
+    spendings = Spending.objects.filter(user=user, date__year=selected_year, date__month=selected_month).order_by('date')
     
-    selected_month = request.GET.get('month')
-    selected_year = request.GET.get('year')
-    if not selected_month or not selected_year:
-        selected_month = now().strftime('%m')  # Formato: MM
-        selected_year = now().strftime('%Y')  # Formato: YYYY
-
-    year = int(selected_year)
-    month = int(selected_month)
-
-    if request.method == 'POST':
-        form_type = request.POST.get('form_type')
-        if form_type == 'income':
-            date = request.POST.get('date')
-            description = request.POST.get('description')
-            category = request.POST.get('category')
-            amount = request.POST.get('amount')
-            Income.objects.create(user=request.user, date=date, description=description, category=category, amount=amount)
-        elif form_type == 'spending':
-            date = request.POST.get('date')
-            description = request.POST.get('description')
-            category = request.POST.get('category')
-            amount = request.POST.get('amount')
-            Spending.objects.create(user=request.user, date=date, description=description, category=category, amount=amount)
-        return redirect('dashboard')
-
-    incomes = Income.objects.filter(user=request.user, date__year=year, date__month=month)
-    spendings = Spending.objects.filter(user=request.user, date__year=year, date__month=month)
-    total_income = sum(income.amount for income in incomes)
-    total_spending = sum(spending.amount for spending in spendings)
-    selected_month_display = now().replace(year=year, month=month).strftime('%B')
-
-    return render(request, 'dashboard/dashboard.html', {
+    total_income = incomes.aggregate(total=models.Sum('amount'))['total'] or 0
+    total_spending = spendings.aggregate(total=models.Sum('amount'))['total'] or 0
+    
+    context = {
         'incomes': incomes,
         'spendings': spendings,
         'total_income': total_income,
         'total_spending': total_spending,
-        'selected_month': selected_month,
+        'years': range(2024, 2027),
+        'months': [
+            {'value': 1, 'name': 'January'},
+            {'value': 2, 'name': 'February'},
+            {'value': 3, 'name': 'March'},
+            {'value': 4, 'name': 'April'},
+            {'value': 5, 'name': 'May'},
+            {'value': 6, 'name': 'June'},
+            {'value': 7, 'name': 'July'},
+            {'value': 8, 'name': 'August'},
+            {'value': 9, 'name': 'September'},
+            {'value': 10, 'name': 'October'},
+            {'value': 11, 'name': 'November'},
+            {'value': 12, 'name': 'December'},
+        ],
         'selected_year': selected_year,
-        'selected_month_display': selected_month_display,
-        'months': months,
-        'years': years,
-    })
+        'selected_month': selected_month,
+        'selected_month_display': datetime(selected_year, selected_month, 1).strftime('%B')
+    }
+    
+    return render(request, 'dashboard/dashboard.html', context)
 
 @login_required
 def add_income(request):
