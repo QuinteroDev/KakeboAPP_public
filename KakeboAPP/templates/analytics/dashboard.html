@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics Dashboard</title>
+</head>
+<body>
+    <h1>Analytics Dashboard</h1>
+    <div class="month-selection">
+        <form method="get" action="{% url 'analytics_dashboard' %}">
+            <label for="year">Select Year:</label>
+            <select id="year" name="year">
+                {% for y in years %}
+                <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+            <label for="month">Select Month:</label>
+            <select id="month" name="month">
+                {% for m in months %}
+                <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Go</button>
+        </form>
+    </div>
+    <h3>Monthly Spending vs. Goals ({{ selected_month_display }} {{ selected_year }})</h3>
+
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Goal Percentage</th>
+            <th>Actual Spending</th>
+            <th>Percentage of Income Spent</th>
+        </tr>
+        {% for item in comparison %}
+        <tr>
+            <td>{{ item.category }}</td>
+            <td>{{ item.goal_percentage }}%</td>
+            <td>${{ item.spending }}</td>
+            <td>{{ item.percentage_spent }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

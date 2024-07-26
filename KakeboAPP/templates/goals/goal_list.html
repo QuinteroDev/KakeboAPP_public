@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Goals</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Goals</h1>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="{% url 'goal_list' %}">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Percentage</th>
+                </tr>
+                {% for goal in user_goals %}
+                <tr>
+                    <td>{{ goal.category }}</td>
+                    <td>
+                        <input type="number" name="percentage_{{ goal.id }}" value="{{ goal.percentage }}" step="1" min="0" max="100" required>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
