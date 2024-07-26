@@ -1,22 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Income, Spending
 from .forms import IncomeForm, SpendingForm
-from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import datetime
 from django.db import models
 
-@login_required
 def dashboard(request):
-    user = request.user
-
     selected_year = request.GET.get('year', datetime.now().year)
     selected_month = request.GET.get('month', datetime.now().month)
     selected_year = int(selected_year)
     selected_month = int(selected_month)
     
-    incomes = Income.objects.filter(user=user, date__year=selected_year, date__month=selected_month).order_by('date')
-    spendings = Spending.objects.filter(user=user, date__year=selected_year, date__month=selected_month).order_by('date')
+    incomes = Income.objects.filter(date__year=selected_year, date__month=selected_month).order_by('date')
+    spendings = Spending.objects.filter(date__year=selected_year, date__month=selected_month).order_by('date')
     
     total_income = incomes.aggregate(total=models.Sum('amount'))['total'] or 0
     total_spending = spendings.aggregate(total=models.Sum('amount'))['total'] or 0
@@ -48,33 +44,26 @@ def dashboard(request):
     
     return render(request, 'dashboard/dashboard.html', context)
 
-@login_required
 def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
-            income = form.save(commit=False)
-            income.user = request.user
-            income.save()
+            form.save()
             return redirect('dashboard')
     else:
         form = IncomeForm()
     return render(request, 'dashboard/add_income.html', {'form': form})
 
-@login_required
 def add_spending(request):
     if request.method == 'POST':
         form = SpendingForm(request.POST)
         if form.is_valid():
-            spending = form.save(commit=False)
-            spending.user = request.user
-            spending.save()
+            form.save()
             return redirect('dashboard')
     else:
         form = SpendingForm()
     return render(request, 'dashboard/add_spending.html', {'form': form})
 
-@login_required
 def edit_income(request, pk):
     income = get_object_or_404(Income, pk=pk)
     if request.method == 'POST':
@@ -86,7 +75,6 @@ def edit_income(request, pk):
         form = IncomeForm(instance=income)
     return render(request, 'dashboard/edit_income.html', {'form': form})
 
-@login_required
 def edit_spending(request, pk):
     spending = get_object_or_404(Spending, pk=pk)
     if request.method == 'POST':
@@ -98,7 +86,6 @@ def edit_spending(request, pk):
         form = SpendingForm(instance=spending)
     return render(request, 'dashboard/edit_spending.html', {'form': form})
 
-@login_required
 def delete_income(request, pk):
     income = get_object_or_404(Income, pk=pk)
     if request.method == 'POST':
@@ -106,7 +93,6 @@ def delete_income(request, pk):
         return redirect('dashboard')
     return render(request, 'dashboard/delete_income.html', {'income': income})
 
-@login_required
 def delete_spending(request, pk):
     spending = get_object_or_404(Spending, pk=pk)
     if request.method == 'POST':

@@ -1,3 +1,4 @@
+# Analytics/views.py
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from Goals.models import UserGoal
@@ -12,13 +13,13 @@ def analytics_dashboard(request):
     month = int(request.GET.get('month', datetime.now().month))
 
     # Obtener los objetivos del usuario
-    goals = UserGoal.objects.filter(user=user)
+    goals = UserGoal.objects.all()
 
     # Obtener los ingresos y gastos del usuario para el mes y año seleccionados
-    incomes = Income.objects.filter(user=user, date__year=year, date__month=month)
+    incomes = Income.objects.filter(date__year=year, date__month=month)
     total_income = incomes.aggregate(total_amount=Sum('amount'))['total_amount'] or 0
 
-    spendings = Spending.objects.filter(user=user, date__year=year, date__month=month)
+    spendings = Spending.objects.filter(date__year=year, date__month=month)
 
     # Calcular el total de gastos por categoría
     total_spendings = spendings.values('category').annotate(total_amount=Sum('amount'))

@@ -1,3 +1,4 @@
+# Goals/forms.py
 from django import forms
 from .models import UserGoal
 
@@ -14,11 +15,10 @@ class UserGoalForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        user = self.instance.user
         category = cleaned_data.get("category")
         percentage = cleaned_data.get("percentage")
 
-        user_goals = UserGoal.objects.filter(user=user).exclude(category=category)
+        user_goals = UserGoal.objects.exclude(category=category)
         total_percentage = sum(goal.percentage for goal in user_goals) + percentage
         if total_percentage > 100:
             raise forms.ValidationError("La suma total de los porcentajes no puede exceder el 100%.")
