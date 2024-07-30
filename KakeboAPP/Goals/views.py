@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import UserGoal
 from django.contrib.auth.decorators import login_required
 
-@login_required
+
 def goal_list(request):
     user_goals = UserGoal.objects.all()
 

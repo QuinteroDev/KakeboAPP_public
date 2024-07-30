@@ -1,121 +1,175 @@
+{% extends "layout/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
-</head>
-<body>
-    <div class="header">
-        <div class="logo">Logo</div>
-    </div>
-    <div class="container">
-        <div class="sidebar">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'goal_list' %}">Goals</a></li>
-                <li><a href="{% url 'analytics_dashboard' %}">Analytics</a></li>
-            </ul>
-        </div>
-        <div class="main-content">
-            <h2>Dashboard</h2>
-            <div class="month-selection">
-                <form method="get" action="{% url 'dashboard' %}">
-                    <label for="year">Select Year:</label>
-                    <select id="year" name="year">
-                        {% for y in years %}
-                        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="month">Select Month:</label>
-                    <select id="month" name="month">
-                        {% for m in months %}
-                        <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Go</button>
-                </form>
-            </div>
-            <div class="summary">
-                <h3>Monthly Summary ({{ selected_month_display }} {{ selected_year }})</h3>
-                <p>Total Income: {{ total_income }}</p>
-                <p>Total Spending: {{ total_spending }}</p>
-            </div>
-            <div class="records">
-                <h3>Income Records</h3>
-                <ul>
-                    {% for income in incomes %}
-                    <li>{{ income.date }} - {{ income.description }} - {{ income.category }} - {{ income.amount }} <a href="{% url 'edit_income' income.pk %}">Edit</a> <a href="{% url 'delete_income' income.pk %}">Delete</a></li>
-                    {% endfor %}
-                </ul>
 
-                <h3>Spending Records</h3>
-                <ul>
-                    {% for spending in spendings %}
-                    <li>{{ spending.date }} - {{ spending.description }} - {{ spending.category }} - {{ spending.amount }} <a href="{% url 'edit_spending' spending.pk %}">Edit</a> <a href="{% url 'delete_spending' spending.pk %}">Delete</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="actions">
-            <h3>Add Income</h3>
-            <form method="post" action="{% url 'add_income' %}">
-                {% csrf_token %}
-                <div class="input-group">
-                    <input type="date" name="date" required>
-                    <label>Date</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="description" required>
-                    <label>Description</label>
-                </div>
-                <div class="input-group">
-                    <select name="category" required>
-                        <option value="nomina">Nómina y Salarios</option>
-                        <option value="inversiones">Retorno de Inversiones</option>
-                        <option value="proyectos">Ingresos de Proyectos y Emprendimiento</option>
-                        <option value="otros">Otros Ingresos</option>
-                    </select>
-                    <label>Category</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" step="0.01" name="amount" required>
-                    <label>Amount</label>
-                </div>
-                <button type="submit" class="btn">Add Income</button>
-            </form>
+{% block title %}Dashboard{% endblock %}
 
-            <h3>Add Spending</h3>
-            <form method="post" action="{% url 'add_spending' %}">
-                {% csrf_token %}
-                <div class="input-group">
-                    <input type="date" name="date" required>
-                    <label>Date</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="description" required>
-                    <label>Description</label>
-                </div>
-                <div class="input-group">
-                    <select name="category" required>
-                        <option value="necesidades">Necesidades Básicas</option>
-                        <option value="ahorro">Ahorro e Inversión</option>
-                        <option value="educacion">Formación y Educación</option>
-                        <option value="ocio">Ocio y Entretenimiento</option>
-                        <option value="donaciones">Donaciones</option>
-                        <option value="proyectos">Proyectos y Emprendimiento</option>
-                    </select>
-                    <label>Category</label>
-                </div>
-                <div class="input-group">
-                    <input type="number" step="0.01" name="amount" required>
-                    <label>Amount</label>
-                </div>
-                <button type="submit" class="btn">Add Spending</button>
-            </form>
-        </div>
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'dashboard/styles.css' %}?{% now 'U' %}">
+{% endblock %} 
+
+{% block content %}
+<h2>Dashboard</h2>
+<div class="month-selection">
+    <form method="get" action="{% url 'dashboard' %}">
+        <label for="year">Select Year:</label>
+        <select id="year" name="year">
+            {% for y in years %}
+            <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+        <label for="month">Select Month:</label>
+        <select id="month" name="month">
+            {% for m in months %}
+            <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Go</button>
+    </form>
+</div>
+<div class="summary">
+    <h3>Monthly Summary ({{ selected_month_display }} {{ selected_year }})</h3>
+    <div class="summary-item">
+        <p class="summary-title">Total Income</p>
+        <p class="summary-value">{{ total_income }}</p>
+        <p class="summary-change"><span class="arrow up-arrow">&#8593;</span></p>
     </div>
-</body>
-</html>
+    <div class="summary-item">
+        <p class="summary-title">Total Spending</p>
+        <p class="summary-value">{{ total_spending }}</p>
+        <p class="summary-change"><span class="arrow down-arrow">&#8595;</span></p>
+    </div>
+    <div class="summary-item">
+        <p class="summary-title">Balance</p>
+        <p class="summary-value">{{ balance }}</p>
+        <p class="summary-change">
+            {% if balance > 0 %}
+                <span class="arrow up-arrow">&#8593;</span>
+            {% elif balance == 0 %}
+                <span class="arrow neutral-arrow">&#8594;</span>
+            {% else %}
+                <span class="arrow down-arrow">&#8595;</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+<div class="actions-container">
+    <div class="action">
+        <h3>Add Income</h3>
+        <form method="post" action="{% url 'add_income' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="income-date">Date</label>
+                <input id="income-date" type="date" name="date" required>
+            </div>
+            <div class="input-group">
+                <label for="income-description">Description</label>
+                <input id="income-description" type="text" name="description" required>
+            </div>
+            <div class="input-group">
+                <label for="income-category">Category</label>
+                <select id="income-category" name="category" required>
+                    <option value="nomina">Nómina y Salarios</option>
+                    <option value="inversiones">Retorno de Inversiones</option>
+                    <option value="proyectos">Ingresos de Proyectos y Emprendimiento</option>
+                    <option value="otros">Otros Ingresos</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="income-amount">Amount</label>
+                <input id="income-amount" type="number" step="0.01" name="amount" required>
+            </div>
+            <button type="submit" class="btn">Add Income</button>
+        </form>
+    </div>
+
+    <div class="action">
+        <h3>Add Spending</h3>
+        <form method="post" action="{% url 'add_spending' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="spending-date">Date</label>
+                <input id="spending-date" type="date" name="date" required>
+            </div>
+            <div class="input-group">
+                <label for="spending-description">Description</label>
+                <input id="spending-description" type="text" name="description" required>
+            </div>
+            <div class="input-group">
+                <label for="spending-category">Category</label>
+                <select id="spending-category" name="category" required>
+                    <option value="necesidades">Necesidades Básicas</option>
+                    <option value="ahorro">Ahorro e Inversión</option>
+                    <option value="educacion">Formación y Educación</option>
+                    <option value="ocio">Ocio y Entretenimiento</option>
+                    <option value="donaciones">Donaciones</option>
+                    <option value="proyectos">Proyectos y Emprendimiento</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="spending-amount">Amount</label>
+                <input id="spending-amount" type="number" step="0.01" name="amount" required>
+            </div>
+            <button type="submit" class="btn">Add Spending</button>
+        </form>
+    </div>
+</div>
+<div class="records">
+    <h3>Income Records</h3>
+    <table class="record-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ income.date }}</td>
+                <td>{{ income.description }}</td>
+                <td>{{ income.category }}</td>
+                <td>${{ income.amount }}</td>
+                <td>
+                    <a href="{% url 'edit_income' income.pk %}">Edit</a>
+                    <a href="{% url 'delete_income' income.pk %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Spending Records</h3>
+    <table class="record-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for spending in spendings %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ spending.date }}</td>
+                <td>{{ spending.description }}</td>
+                <td>{{ spending.category }}</td>
+                <td>${{ spending.amount }}</td>
+                <td>
+                    <a href="{% url 'edit_spending' spending.pk %}">Edit</a>
+                    <a href="{% url 'delete_spending' spending.pk %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

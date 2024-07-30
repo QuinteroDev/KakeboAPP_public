@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}KakeboAPP{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'layout/styles.css' %}?{% now 'U' %}">
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Welcome back to Kakeibo APP!</h1>
+            <div class="header-buttons">
+                <button class="search-button">&#128269;</button>
+                <button class="notification-button">&#128276;</button>
+                <button class="user-button">&#128100;</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <img src="{% static 'img/logooo.png' %}" alt="KakeboAPP Logo" class="logo">
+            <ul>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'goal_list' %}">Goals</a></li>
+                <li><a href="{% url 'analytics_dashboard' %}">Analytics</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

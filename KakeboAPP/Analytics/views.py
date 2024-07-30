@@ -1,12 +1,10 @@
 # Analytics/views.py
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from Goals.models import UserGoal
 from Dashboard.models import Spending, Income
 from datetime import datetime
 from django.db.models import Sum
 
-@login_required
 def analytics_dashboard(request):
     user = request.user
     year = int(request.GET.get('year', datetime.now().year))
@@ -33,11 +31,17 @@ def analytics_dashboard(request):
             'category': goal.category,
             'goal_percentage': goal.percentage,
             'spending': spending,
-            'percentage_spent': percentage_spent,
+            'percentage_spent': round(percentage_spent, 2),
+            'status': calculate_status(goal.percentage, percentage_spent, goal.category)
         })
+
+    balance = total_income - sum(item['spending'] for item in comparison)
 
     context = {
         'comparison': comparison,
+        'total_income': total_income,
+        'total_spending': sum(item['spending'] for item in comparison),
+        'balance': balance,
         'selected_year': year,
         'selected_month': month,
         'selected_month_display': datetime(year, month, 1).strftime('%B'),  # Para mostrar el nombre del mes
@@ -51,3 +55,20 @@ def analytics_dashboard(request):
     }
 
     return render(request, 'analytics/dashboard.html', context)
+
+def calculate_status(goal_percentage, percentage_spent, category):
+    if percentage_spent == 0:
+        return 'neutral'
+    elif category == 'necesidades':
+        if percentage_spent > goal_percentage:
+            return 'red'
+        else:
+            return 'green'
+    elif percentage_spent >= goal_percentage:
+        return 'green'
+    elif goal_percentage - percentage_spent <= 2:
+        return 'green'
+    elif 2 < goal_percentage - percentage_spent <= 5:
+        return 'orange'
+    else:
+        return 'red'

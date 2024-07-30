@@ -1,46 +1,115 @@
-<!-- Analytics/templates/analytics/dashboard.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Analytics Dashboard</title>
-</head>
-<body>
-    <h1>Analytics Dashboard</h1>
-    <div class="month-selection">
-        <form method="get" action="{% url 'analytics_dashboard' %}">
-            <label for="year">Select Year:</label>
-            <select id="year" name="year">
-                {% for y in years %}
-                <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
-                {% endfor %}
-            </select>
-            <label for="month">Select Month:</label>
-            <select id="month" name="month">
-                {% for m in months %}
-                <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.name }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit">Go</button>
-        </form>
-    </div>
-    <h3>Monthly Spending vs. Goals ({{ selected_month_display }} {{ selected_year }})</h3>
+{% extends "layout/base.html" %}
+{% load static %}
 
-    <table>
+{% block title %}Analytics Dashboard{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'analytics/styles.css' %}?{% now 'U' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Analytics Dashboard</h1>
+<div class="month-selection">
+    <form method="get" action="{% url 'analytics_dashboard' %}">
+        <label for="year">Select Year:</label>
+        <select id="year" name="year">
+            {% for y in years %}
+            <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+        <label for="month">Select Month:</label>
+        <select id="month" name="month">
+            {% for m in months %}
+            <option value="{{ m.value }}" {% if m.value == selected_month %}selected{% endif %}>{{ m.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Go</button>
+    </form>
+</div>
+<div class="summary">
+    <h3>Monthly Spending vs. Goals ({{ selected_month_display }} {{ selected_year }})</h3>
+    <div class="summary-item">
+        <div class="summary-title">Total Income</div>
+        <div class="summary-value">{{ total_income }}</div>
+    </div>
+    <div class="summary-item">
+        <div class="summary-title">Total Spending</div>
+        <div class="summary-value">{{ total_spending }}</div>
+    </div>
+    <div class="summary-item">
+        <div class="summary-title">Balance</div>
+        <div class="summary-value">{{ balance }}</div>
+    </div>
+</div>
+<div class="chart-container">
+    <h3>Earnings</h3>
+    <canvas id="earningsChart"></canvas>
+</div>
+<table class="record-table">
+    <thead>
         <tr>
             <th>Category</th>
             <th>Goal Percentage</th>
             <th>Actual Spending</th>
             <th>Percentage of Income Spent</th>
+            <th>Status</th>
         </tr>
+    </thead>
+    <tbody>
         {% for item in comparison %}
         <tr>
             <td>{{ item.category }}</td>
             <td>{{ item.goal_percentage }}%</td>
             <td>${{ item.spending }}</td>
             <td>{{ item.percentage_spent }}%</td>
+            <td>
+                {% if item.status == 'green' %}
+                <span class="arrow up-arrow">&#9650;</span>
+                {% elif item.status == 'orange' %}
+                <span class="arrow neutral-arrow">&#9650;</span>
+                {% elif item.status == 'red' %}
+                <span class="arrow down-arrow">&#9660;</span>
+                {% else %}
+                <span class="arrow neutral-arrow">&#8212;</span>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
-    </table>
-</body>
-</html>
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('earningsChart').getContext('2d');
+        var earningsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [{% for item in comparison %}'{{ item.category }}',{% endfor %}],
+                datasets: [{
+                    data: [{% for item in comparison %}{{ item.spending }},{% endfor %}],
+                    backgroundColor: ['#0F123F', '#FE981E', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': $' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                },
+                cutout: '70%',
+            }
+        });
+    });
+</script>
+{% endblock %}

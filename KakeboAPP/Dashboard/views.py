@@ -16,12 +16,14 @@ def dashboard(request):
     
     total_income = incomes.aggregate(total=models.Sum('amount'))['total'] or 0
     total_spending = spendings.aggregate(total=models.Sum('amount'))['total'] or 0
+    balance = total_income - total_spending
     
     context = {
         'incomes': incomes,
         'spendings': spendings,
         'total_income': total_income,
         'total_spending': total_spending,
+        'balance': total_income - total_spending,
         'years': range(2024, 2027),
         'months': [
             {'value': 1, 'name': 'January'},

@@ -1,16 +1,40 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Edit Income</title>
-    <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'layout/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
+    <!-- Añadir enlaces a Bootstrap CSS y jQuery -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Edit Income</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Changes</button>
-    </form>
+    <div class="container">
+        <div class="edit-form">
+            <h1>Edit Income</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    {{ form.date.label_tag }} {{ form.date }}
+                </div>
+                <div class="input-group">
+                    {{ form.description.label_tag }} {{ form.description }}
+                </div>
+                <div class="input-group">
+                    {{ form.category.label_tag }} {{ form.category }}
+                </div>
+                <div class="input-group">
+                    {{ form.amount.label_tag }} {{ form.amount }}
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Go Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
