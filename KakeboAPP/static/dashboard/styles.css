@@ -1,6 +1,6 @@
-h2 {
-    color: black;
-    font-size: 28px;
+body {
+    font-family: "Outfit", sans-serif;
+    background-color: white;
     margin: 0;
     padding: 0;
 }
@@ -26,12 +26,18 @@ h2 {
     padding: 5px 10px; /* Espaciado interno */
     border: 1px solid #ccc; /* Borde */
     border-radius: 5px; /* Bordes redondeados */
-    margin-right: 15px;;
+    margin-right: 15px;
 }
 
-/* static/dashboard/css/styles.css */
+.title {
+    display: flex;
+    justify-content: left;
+}
 
-
+.title h2 {
+    font-size: 32px;
+    margin: 0;
+}
 
 .summary {
     display: flex;
@@ -164,8 +170,33 @@ h2 {
 
 .record-table th, .record-table td {
     padding: 15px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
+    width: 150px;
+}
+
+.record-table th:first-child, .record-table td:first-child {
+    width: 50px; /* Ancho para la columna No */
+}
+
+.record-table th:nth-child(2), .record-table td:nth-child(2) {
+    width: 150px; /* Ancho para la columna Date */
+}
+
+.record-table th:nth-child(3), .record-table td:nth-child(3) {
+    width: 200px; /* Ancho para la columna Description */
+}
+
+.record-table th:nth-child(4), .record-table td:nth-child(4) {
+    width: 150px; /* Ancho para la columna Category */
+}
+
+.record-table th:nth-child(5), .record-table td:nth-child(5) {
+    width: 150px; /* Ancho para la columna Amount */
+}
+
+.record-table th:last-child, .record-table td:last-child {
+    width: 100px; /* Ancho para la columna Action */
 }
 
 .record-table th {
@@ -202,7 +233,6 @@ h2 {
     color: darkred;
 }
 
-
 .record-table thead th:first-child, .record-table tbody td:first-child {
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
@@ -213,7 +243,6 @@ h2 {
     border-bottom-right-radius: 12px;
 }
 
-/* Estilos generales para la forma de edición */
 .edit-form {
     background: #f9f9f9;
     padding: 20px;
@@ -226,7 +255,6 @@ h2 {
 .edit-form h1 {
     text-align: center;
     margin-bottom: 20px;
-   
 }
 
 .edit-form .input-group {
@@ -250,16 +278,13 @@ h2 {
 .edit-form .buttons {
     text-align: center;
     margin-top: 20px;
-    
 }
 
 .edit-form .buttons .btn {
     margin: 0;
     margin-bottom: 10px;
-    
 }
 
-/* Estilos generales para la forma de eliminación */
 .delete-form {
     background: #f9f9f9;
     padding: 20px;

@@ -3,16 +3,16 @@ import datetime
 
 class Spending(models.Model):
     SPENDING_CHOICES = (
-        ('necesidades', 'Necesidades Básicas'),
-        ('ahorro', 'Ahorro e Inversión'),
-        ('educacion', 'Formación y Educación'),
-        ('ocio', 'Ocio y Entretenimiento'),
-        ('donaciones', 'Donaciones'),
-        ('proyectos', 'Proyectos y Emprendimiento'),
+        ('basic_needs', 'Basic Needs'),
+        ('saving', 'Saving and Investment'),
+        ('education', 'Education'),
+        ('leisure', 'Leisure and Entertainment'),
+        ('donations', 'Donations'),
+        ('projects', 'Projects and Entrepreneurship'),
     )
     date = models.DateField(default=datetime.date.today)
     description = models.CharField(max_length=100, blank=True, null=True)
-    category = models.CharField(max_length=100, choices=SPENDING_CHOICES, default='necesidades')
+    category = models.CharField(max_length=100, choices=SPENDING_CHOICES, default='basic_needs')
     amount = models.FloatField()
 
     class Meta:
@@ -23,14 +23,14 @@ class Spending(models.Model):
 
 class Income(models.Model):
     INCOME_CHOICES = (
-        ('nomina', 'Nómina y Salarios'),
-        ('inversiones', 'Retorno de Inversiones'),
-        ('proyectos', 'Ingresos de Proyectos y Emprendimiento'),
-        ('otros', 'Otros Ingresos'),
+        ('salary', 'Salary and Wages'),
+        ('investments', 'Return on Investments'),
+        ('projects', 'Project and Entrepreneurship Income'),
+        ('other', 'Other Income'),
     )
     date = models.DateField(default=datetime.date.today)
     description = models.CharField(max_length=100, blank=True, null=True)
-    category = models.CharField(max_length=100, choices=INCOME_CHOICES, default='nomina')
+    category = models.CharField(max_length=100, choices=INCOME_CHOICES, default='salary')
     amount = models.FloatField()
 
     class Meta:

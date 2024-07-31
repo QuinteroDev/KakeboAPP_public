@@ -9,20 +9,15 @@ def goal_list(request):
 
     # Definir las categorías y los porcentajes predeterminados
     default_goals = [
-        {'category': 'necesidades', 'percentage': 30},
-        {'category': 'ahorro', 'percentage': 10},
-        {'category': 'educacion', 'percentage': 10},
-        {'category': 'ocio', 'percentage': 10},
-        {'category': 'donaciones', 'percentage': 10},
-        {'category': 'proyectos', 'percentage': 30},
+        {'category': 'Basic Needs', 'percentage': 30},
+        {'category': 'Savings and Investments', 'percentage': 10},
+        {'category': 'Education', 'percentage': 10},
+        {'category': 'Leisure', 'percentage': 10},
+        {'category': 'Donations', 'percentage': 10},
+        {'category': 'Projects and Entrepreneurship', 'percentage': 30},
     ]
 
     # Crear categorías predeterminadas si no existen
-    for goal in default_goals:
-        UserGoal.objects.get_or_create(
-            category=goal['category'],
-            defaults={'percentage': goal['percentage']}
-        )
 
     user_goals = UserGoal.objects.all()
 

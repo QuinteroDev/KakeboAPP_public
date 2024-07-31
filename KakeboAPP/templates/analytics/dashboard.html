@@ -41,10 +41,6 @@
         <div class="summary-value">{{ balance }}</div>
     </div>
 </div>
-<div class="chart-container">
-    <h3>Earnings</h3>
-    <canvas id="earningsChart"></canvas>
-</div>
 <table class="record-table">
     <thead>
         <tr>
@@ -77,39 +73,13 @@
         {% endfor %}
     </tbody>
 </table>
-{% endblock %}
-
-{% block extra_scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('earningsChart').getContext('2d');
-        var earningsChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: [{% for item in comparison %}'{{ item.category }}',{% endfor %}],
-                datasets: [{
-                    data: [{% for item in comparison %}{{ item.spending }},{% endfor %}],
-                    backgroundColor: ['#0F123F', '#FE981E', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return tooltipItem.label + ': $' + tooltipItem.raw;
-                            }
-                        }
-                    }
-                },
-                cutout: '70%',
-            }
-        });
-    });
-</script>
+<div class="legend">
+    <h3>Legend</h3>
+    <ul>
+        <li><span class="arrow up-arrow">&#9650;</span> Green: Spending is within or above the goal by up to 3%.</li>
+        <li><span class="arrow neutral-arrow">&#9650;</span> Orange: Spending is below the goal by 3% to 5%.</li>
+        <li><span class="arrow down-arrow">&#9660;</span> Red: Spending exceeds the goal or is below the goal by more than 5%.</li>
+        <li><span class="arrow neutral-arrow">&#8212;</span> Neutral: No spending recorded.</li>
+    </ul>
+</div>
 {% endblock %}

@@ -3,12 +3,12 @@ from django.db import models
 
 class UserGoal(models.Model):
     CATEGORY_CHOICES = (
-        ('necesidades', 'Necesidades Básicas'),
-        ('ahorro', 'Ahorro e Inversión'),
-        ('educacion', 'Formación y Educación'),
-        ('ocio', 'Ocio y Entretenimiento'),
-        ('donaciones', 'Donaciones'),
-        ('proyectos', 'Proyectos y Emprendimiento'),
+        ('basic_needs', 'Basic Needs'),
+        ('saving', 'Saving and Investment'),
+        ('education', 'Education'),
+        ('leisure', 'Leisure and Entertainment'),
+        ('donations', 'Donations'),
+        ('projects', 'Projects and Entrepreneurship'),
     )
 
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)

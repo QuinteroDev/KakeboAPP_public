@@ -57,7 +57,7 @@ body {
 }
 
 .sidebar {
-    background-color: #0F123F;
+    background-color: #0056b3;
     color: #fff;
     width: 250px;
     height: 100vh;
@@ -83,7 +83,7 @@ body {
 }
 
 .sidebar ul li a {
-    color: #67698E;
+    color: white;
     text-decoration: none;
     display: block;
     font-size: 24px;

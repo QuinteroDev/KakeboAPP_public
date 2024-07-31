@@ -5,10 +5,12 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}?{% now 'U' %}">
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
-<h2>Dashboard</h2>
+<div class="title">
+    <h2>Dashboard</h2>
+</div>
 <div class="month-selection">
     <form method="get" action="{% url 'dashboard' %}">
         <label for="year">Select Year:</label>
@@ -27,7 +29,7 @@
     </form>
 </div>
 <div class="summary">
-    <h3>Monthly Summary ({{ selected_month_display }} {{ selected_year }})</h3>
+    <h3>Monthly Summary <br> ({{ selected_month_display }} {{ selected_year }})</h3>
     <div class="summary-item">
         <p class="summary-title">Total Income</p>
         <p class="summary-value">{{ total_income }}</p>
@@ -68,10 +70,10 @@
             <div class="input-group">
                 <label for="income-category">Category</label>
                 <select id="income-category" name="category" required>
-                    <option value="nomina">Nómina y Salarios</option>
-                    <option value="inversiones">Retorno de Inversiones</option>
-                    <option value="proyectos">Ingresos de Proyectos y Emprendimiento</option>
-                    <option value="otros">Otros Ingresos</option>
+                    <option value="salary">Salary and Wages</option>
+                    <option value="investments">Return on Investments</option>
+                    <option value="projects">Project and Entrepreneurship income</option>
+                    <option value="other">Other Income</option>
                 </select>
             </div>
             <div class="input-group">
@@ -97,12 +99,12 @@
             <div class="input-group">
                 <label for="spending-category">Category</label>
                 <select id="spending-category" name="category" required>
-                    <option value="necesidades">Necesidades Básicas</option>
-                    <option value="ahorro">Ahorro e Inversión</option>
-                    <option value="educacion">Formación y Educación</option>
-                    <option value="ocio">Ocio y Entretenimiento</option>
-                    <option value="donaciones">Donaciones</option>
-                    <option value="proyectos">Proyectos y Emprendimiento</option>
+                    <option value="basic_needs">Basic Needs</option>
+                    <option value="saving">Saving and Investment</option>
+                    <option value="education">Education</option>
+                    <option value="leisure">Leisure and Entertainment</option>
+                    <option value="donations">Donations</option>
+                    <option value="projects">Projects and Entrepreneurship</option>
                 </select>
             </div>
             <div class="input-group">
@@ -132,7 +134,7 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ income.date }}</td>
                 <td>{{ income.description }}</td>
-                <td>{{ income.category }}</td>
+                <td>{{ income.get_category_display }}</td>
                 <td>${{ income.amount }}</td>
                 <td>
                     <a href="{% url 'edit_income' income.pk %}">Edit</a>
@@ -161,7 +163,7 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ spending.date }}</td>
                 <td>{{ spending.description }}</td>
-                <td>{{ spending.category }}</td>
+                <td>{{ spending.get_category_display }}</td>
                 <td>${{ spending.amount }}</td>
                 <td>
                     <a href="{% url 'edit_spending' spending.pk %}">Edit</a>

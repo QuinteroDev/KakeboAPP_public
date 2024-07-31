@@ -67,7 +67,7 @@ h1 {
 .save-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #0056b3;
     color: white;
     border: none;
     border-radius: 5px;
@@ -76,5 +76,14 @@ h1 {
 }
 
 .save-button:hover {
-    background-color: #0056b3;
+    background-color: #0F123F;
+}
+
+.tips h2 {
+    font-size: 32px;
+}
+
+.tips p {
+    font-size: 18px;
+    line-height: 1.8; /* Puedes ajustar este valor para aumentar o disminuir el interlineado */
 }

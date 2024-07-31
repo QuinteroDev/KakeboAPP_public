@@ -1,4 +1,3 @@
-# Analytics/views.py
 from django.shortcuts import render
 from Goals.models import UserGoal
 from Dashboard.models import Spending, Income
@@ -6,21 +5,19 @@ from datetime import datetime
 from django.db.models import Sum
 
 def analytics_dashboard(request):
-    user = request.user
     year = int(request.GET.get('year', datetime.now().year))
     month = int(request.GET.get('month', datetime.now().month))
 
-    # Obtener los objetivos del usuario
-    goals = UserGoal.objects.all()
-
-    # Obtener los ingresos y gastos del usuario para el mes y año seleccionados
+    # Obtener los ingresos del usuario para el mes y año seleccionados
     incomes = Income.objects.filter(date__year=year, date__month=month)
     total_income = incomes.aggregate(total_amount=Sum('amount'))['total_amount'] or 0
 
+    # Obtener los gastos del usuario para el mes y año seleccionados
     spendings = Spending.objects.filter(date__year=year, date__month=month)
-
-    # Calcular el total de gastos por categoría
     total_spendings = spendings.values('category').annotate(total_amount=Sum('amount'))
+
+    # Obtener los objetivos del usuario
+    goals = UserGoal.objects.all()
 
     # Comparación con los objetivos
     comparison = []
@@ -28,7 +25,7 @@ def analytics_dashboard(request):
         spending = next((item['total_amount'] for item in total_spendings if item['category'] == goal.category), 0)
         percentage_spent = (spending / total_income) * 100 if total_income > 0 else 0
         comparison.append({
-            'category': goal.category,
+            'category': goal.get_category_display(),
             'goal_percentage': goal.percentage,
             'spending': spending,
             'percentage_spent': round(percentage_spent, 2),
@@ -45,7 +42,7 @@ def analytics_dashboard(request):
         'selected_year': year,
         'selected_month': month,
         'selected_month_display': datetime(year, month, 1).strftime('%B'),  # Para mostrar el nombre del mes
-        'years': range(2024, 2027),  # Ejemplo de rango de años
+        'years': range(2024, 2027),
         'months': [
             {'value': 1, 'name': 'January'}, {'value': 2, 'name': 'February'}, {'value': 3, 'name': 'March'},
             {'value': 4, 'name': 'April'}, {'value': 5, 'name': 'May'}, {'value': 6, 'name': 'June'},
@@ -59,7 +56,7 @@ def analytics_dashboard(request):
 def calculate_status(goal_percentage, percentage_spent, category):
     if percentage_spent == 0:
         return 'neutral'
-    elif category == 'necesidades':
+    elif category == 'basic_needs':
         if percentage_spent > goal_percentage:
             return 'red'
         else:
