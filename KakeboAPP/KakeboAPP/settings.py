@@ -29,7 +29,6 @@ load_dotenv(dotenv_path=env_path)
 
 # Clave secreta
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-print(f"SECRET_KEY: {SECRET_KEY}")  # Esto es para verificar que la clave se carga correctamente
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,8 +85,12 @@ WSGI_APPLICATION = 'KakeboAPP.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'kakebo_app',
+        'USER': 'quinterodev',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
