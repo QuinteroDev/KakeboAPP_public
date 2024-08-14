@@ -1,5 +1,10 @@
 from django.db import models
 import datetime
+from django.core.exceptions import ValidationError
+
+def validate_positive(value):
+    if value < 0:
+        raise ValidationError('Amount must be a positive number.')
 
 class Spending(models.Model):
     SPENDING_CHOICES = (
@@ -13,7 +18,7 @@ class Spending(models.Model):
     date = models.DateField(default=datetime.date.today)
     description = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=100, choices=SPENDING_CHOICES, default='basic_needs')
-    amount = models.FloatField()
+    amount = models.FloatField(validators=[validate_positive]) 
 
     class Meta:
         ordering = ['date']
@@ -31,7 +36,7 @@ class Income(models.Model):
     date = models.DateField(default=datetime.date.today)
     description = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=100, choices=INCOME_CHOICES, default='salary')
-    amount = models.FloatField()
+    amount = models.FloatField(validators=[validate_positive])  
 
     class Meta:
         ordering = ['date']

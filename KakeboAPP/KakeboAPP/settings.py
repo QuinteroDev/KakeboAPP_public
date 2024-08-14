@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+
+# Carga las variables del archivo .env
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,8 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p-cb2ftj*(%afiql4*73v7u8n5b((a9-(mwm520f6ve44@ab=('
+env_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=env_path)
+
+# Clave secreta
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+print(f"SECRET_KEY: {SECRET_KEY}")  # Esto es para verificar que la clave se carga correctamente
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,15 +39,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "Dashboard",
-    "Goals",
-    "Analytics",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    "Dashboard",
+    "Goals",
+    "Analytics",
 ]
 
 MIDDLEWARE = [
@@ -123,3 +133,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Autenticación de usuarios
+
+LOGIN_URL = '/login/'  # Redirigir a esta URL si no está autenticado
+LOGIN_REDIRECT_URL = '/dashboard/'  # Redirigir a esta URL después del login
+LOGOUT_REDIRECT_URL = '/login/'  # Redirigir a esta URL después del logout
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']

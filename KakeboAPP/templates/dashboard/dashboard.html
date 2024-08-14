@@ -57,61 +57,63 @@
 <div class="actions-container">
     <div class="action">
         <h3>Add Income</h3>
-        <form method="post" action="{% url 'add_income' %}">
+        <form method="post" action="{% url 'dashboard' %}">
             {% csrf_token %}
             <div class="input-group">
                 <label for="income-date">Date</label>
-                <input id="income-date" type="date" name="date" required>
+                <input id="income-date" type="date" name="date" value="{{ income_form.date.value|default_if_none:'' }}" required>
             </div>
             <div class="input-group">
                 <label for="income-description">Description</label>
-                <input id="income-description" type="text" name="description" required>
+                <input id="income-description" type="text" name="description" value="{{ income_form.description.value|default_if_none:'' }}" required>
             </div>
             <div class="input-group">
                 <label for="income-category">Category</label>
                 <select id="income-category" name="category" required>
-                    <option value="salary">Salary and Wages</option>
-                    <option value="investments">Return on Investments</option>
-                    <option value="projects">Project and Entrepreneurship income</option>
-                    <option value="other">Other Income</option>
+                    {% for choice_value, choice_name in income_form.fields.category.choices %}
+                    <option value="{{ choice_value }}" {% if income_form.category.value == choice_value %}selected{% endif %}>{{ choice_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="input-group">
                 <label for="income-amount">Amount</label>
-                <input id="income-amount" type="number" step="0.01" name="amount" required>
+                <input id="income-amount" type="number" step="0.01" name="amount" value="{{ income_form.amount.value|default_if_none:'' }}" required>
+                {% if income_form.amount.errors %}
+                    <span class="error" style="color: red;">{{ income_form.amount.errors.0 }}</span>
+                {% endif %}
             </div>
-            <button type="submit" class="btn">Add Income</button>
+            <button type="submit" name="add_income" class="btn">Add Income</button>
         </form>
     </div>
 
     <div class="action">
         <h3>Add Spending</h3>
-        <form method="post" action="{% url 'add_spending' %}">
+        <form method="post" action="{% url 'dashboard' %}">
             {% csrf_token %}
             <div class="input-group">
                 <label for="spending-date">Date</label>
-                <input id="spending-date" type="date" name="date" required>
+                <input id="spending-date" type="date" name="date" value="{{ spending_form.date.value|default_if_none:'' }}" required>
             </div>
             <div class="input-group">
                 <label for="spending-description">Description</label>
-                <input id="spending-description" type="text" name="description" required>
+                <input id="spending-description" type="text" name="description" value="{{ spending_form.description.value|default_if_none:'' }}" required>
             </div>
             <div class="input-group">
                 <label for="spending-category">Category</label>
                 <select id="spending-category" name="category" required>
-                    <option value="basic_needs">Basic Needs</option>
-                    <option value="saving">Saving and Investment</option>
-                    <option value="education">Education</option>
-                    <option value="leisure">Leisure and Entertainment</option>
-                    <option value="donations">Donations</option>
-                    <option value="projects">Projects and Entrepreneurship</option>
+                    {% for choice_value, choice_name in spending_form.fields.category.choices %}
+                    <option value="{{ choice_value }}" {% if spending_form.category.value == choice_value %}selected{% endif %}>{{ choice_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="input-group">
                 <label for="spending-amount">Amount</label>
-                <input id="spending-amount" type="number" step="0.01" name="amount" required>
+                <input id="spending-amount" type="number" step="0.01" name="amount" value="{{ spending_form.amount.value|default_if_none:'' }}" required>
+                {% if spending_form.amount.errors %}
+                    <span class="error" style="color: red;">{{ spending_form.amount.errors.0 }}</span>
+                {% endif %}
             </div>
-            <button type="submit" class="btn">Add Spending</button>
+            <button type="submit" name="add_spending" class="btn">Add Spending</button>
         </form>
     </div>
 </div>
@@ -144,7 +146,6 @@
             {% endfor %}
         </tbody>
     </table>
-
     <h3>Spending Records</h3>
     <table class="record-table">
         <thead>

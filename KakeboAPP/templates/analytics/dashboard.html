@@ -76,10 +76,17 @@
 <div class="legend">
     <h3>Legend</h3>
     <ul>
-        <li><span class="arrow up-arrow">&#9650;</span> Green: Spending is within or above the goal by up to 3%.</li>
-        <li><span class="arrow neutral-arrow">&#9650;</span> Orange: Spending is below the goal by 3% to 5%.</li>
-        <li><span class="arrow down-arrow">&#9660;</span> Red: Spending exceeds the goal or is below the goal by more than 5%.</li>
+        <li><span class="arrow up-arrow">&#9650;</span> Green: Spending is within or up to 3% above or below the goal.</li>
+        <li><span class="arrow neutral-arrow">&#9650;</span> Orange: Spending is between 3% and 5% above or below the goal.</li>
+        <li><span class="arrow down-arrow">&#9660;</span> Red: Spending exceeds or is below the goal by more than 5%.</li>
         <li><span class="arrow neutral-arrow">&#8212;</span> Neutral: No spending recorded.</li>
+        <li>
+            <span></span> Special Case for "Basic Needs":
+            <ul style="margin-left: 20px;">
+                <li><span class="arrow up-arrow">&#9650;</span> Green: Spending is below or within the goal.</li>
+                <li><span class="arrow down-arrow">&#9660;</span> Red: Spending exceeds the goal.</li>
+            </ul>
+        </li>
     </ul>
 </div>
 {% endblock %}

@@ -6,26 +6,26 @@ body {
 }
 
 .month-selection {
-    background-color: white; /* Fondo blanco */
-    border-radius: 20px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    padding: 20px; /* Espaciado interno */
-    margin: 20px 0; /* Margen superior e inferior */
-    display: flex; /* Para alinear los elementos */
-    justify-content: space-between; /* Espacio entre los elementos */
-    align-items: center; /* Alineación vertical */
+    background-color: white; 
+    border-radius: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
 }
 
 .month-selection label {
-    font-size: 16px; /* Tamaño de fuente */
-    font-weight: bold; /* Negrita */
-    margin-right: 10px; /* Espacio a la derecha */
+    font-size: 16px; 
+    font-weight: bold; 
+    margin-right: 10px; 
 }
 
 .month-selection select, .month-selection button {
-    padding: 5px 10px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde */
-    border-radius: 5px; /* Bordes redondeados */
+    padding: 5px 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
     margin-right: 15px;
 }
 
@@ -89,15 +89,15 @@ body {
 }
 
 .up-arrow {
-    color: #28A745; /* Verde para aumento */
+    color: #28A745; 
 }
 
 .down-arrow {
-    color: #DC3545; /* Rojo para disminución */
+    color: #DC3545;
 }
 
 .neutral-arrow {
-    color: #FFC107; /* Amarillo para neutral */
+    color: #FFC107;
 }
 
 .actions-container {
@@ -176,27 +176,27 @@ body {
 }
 
 .record-table th:first-child, .record-table td:first-child {
-    width: 50px; /* Ancho para la columna No */
+    width: 50px;
 }
 
 .record-table th:nth-child(2), .record-table td:nth-child(2) {
-    width: 150px; /* Ancho para la columna Date */
+    width: 150px;
 }
 
 .record-table th:nth-child(3), .record-table td:nth-child(3) {
-    width: 200px; /* Ancho para la columna Description */
+    width: 200px; 
 }
 
 .record-table th:nth-child(4), .record-table td:nth-child(4) {
-    width: 150px; /* Ancho para la columna Category */
+    width: 150px;
 }
 
 .record-table th:nth-child(5), .record-table td:nth-child(5) {
-    width: 150px; /* Ancho para la columna Amount */
+    width: 150px; 
 }
 
 .record-table th:last-child, .record-table td:last-child {
-    width: 100px; /* Ancho para la columna Action */
+    width: 100px; 
 }
 
 .record-table th {

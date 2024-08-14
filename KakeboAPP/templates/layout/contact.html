@@ -1,0 +1,48 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %}Contact Me{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <h1>Contact Me</h1>
+    <div class="contact-cards">
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="{% static 'img/mail.png' %}" alt="Email Icon" class="contact-icon">
+                <h2>Email</h2>
+            </div>
+            <div class="contact-body">
+                <a href="mailto:quintero.malaga@gmail.com" class="contact-link">quintero.malaga@gmail.com</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="{% static 'img/linkedin.png' %}" alt="LinkedIn Icon" class="contact-icon">
+                <h2>LinkedIn</h2>
+            </div>
+            <div class="contact-body">
+                <a href="https://www.linkedin.com/in/quinterodev" target="_blank" class="contact-link">Go to LinkedIn</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="{% static 'img/github.png' %}" alt="GitHub Icon" class="contact-icon">
+                <h2>GitHub</h2>
+            </div>
+            <div class="contact-body">
+                <a href="https://github.com/QuinteroDev" target="_blank" class="contact-link">Go to GitHub</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-header">
+                <img src="{% static 'img/discord.png' %}" alt="Discord Icon" class="contact-icon">
+                <h2>Discord</h2>
+            </div>
+            <div class="contact-body">
+                <a href="https://discordapp.com/users/govert_malaga" target="_blank" class="contact-link">Go to Discord</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

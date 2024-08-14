@@ -7,17 +7,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'layout/styles.css' %}?{% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'layout/styles.css' %}?v={{ timestamp }}">
     {% block extra_styles %}{% endblock %}
 </head>
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>Welcome back to Kakeibo APP!</h1>
+            <h1>Welcome to Kakeibo APP!</h1>
             <div class="header-buttons">
-                <button class="search-button">&#128269;</button>
-                <button class="notification-button">&#128276;</button>
-                <button class="user-button">&#128100;</button>
+                <!--<button class="search-button">&#128269;</button>-->
+                <!--<button class="notification-button">&#128276;</button>-->
+                <span class="contact-text">Contact me!</span>
+                <img src="{% static 'img/quintero.jpeg' %}" alt="Quintero photo" class="user-photo" onclick="window.location.href='{% url 'contact' %}'">
             </div>
         </div>
     </div>
@@ -28,6 +29,12 @@
                 <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                 <li><a href="{% url 'goal_list' %}">Goals</a></li>
                 <li><a href="{% url 'analytics_dashboard' %}">Analytics</a></li>
+                <li>
+                    <form id="logout-form" method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
+                </li>
             </ul>
         </div>
         <div class="main-content">

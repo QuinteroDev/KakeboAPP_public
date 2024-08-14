@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 def goal_list(request):
     user_goals = UserGoal.objects.all()
 
-    # Definir las categorías y los porcentajes predeterminados
     default_goals = [
         {'category': 'Basic Needs', 'percentage': 30},
         {'category': 'Savings and Investments', 'percentage': 10},
@@ -16,8 +15,6 @@ def goal_list(request):
         {'category': 'Donations', 'percentage': 10},
         {'category': 'Projects and Entrepreneurship', 'percentage': 30},
     ]
-
-    # Crear categorías predeterminadas si no existen
 
     user_goals = UserGoal.objects.all()
 

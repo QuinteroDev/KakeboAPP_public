@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'login/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <img src="{% static 'img/logooo.png' %}" alt="Kakeibo Logo" class="logo">
+            <h2>Created by QuinteroDev</h2>
+            <img src="{% static 'img/quintero.jpeg' %}" alt="Quintero Photo" class="profile-pic">
+            <h3>Log in Credentials</h3>
+            <p>Username: guest</p>
+            <p>Password: Kakebotrial</p>
+            <p class="demo-info">This application is a demonstration. Access is provided for evaluation purposes only. No personal data is collected or stored.</p>
+        </div>
+        <div class="login-right">
+            <h2>Log in</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Username</label>
+                    <input class="form-control" id="email" name="username" value="info@quintero.cz" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" value="12345678" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Log in</button>
+                {% if form.errors %}
+                <div class="error">
+                <p>Login failed. Please check your username and password.</p>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</body>
+</html>
